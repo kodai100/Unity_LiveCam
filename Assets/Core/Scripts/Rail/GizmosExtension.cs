@@ -90,13 +90,24 @@ namespace kodai100.LiveCamCore
             var old = Gizmos.matrix;
 
             Gizmos.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);
-            var from = Vector3.right * radius;
+
             var fromRad = fromAngle * Mathf.Deg2Rad;
             var toRad = toAngle * Mathf.Deg2Rad;
-            var step = Mathf.RoundToInt((toRad - fromRad) / segments);
-            for (var theta = fromRad + step; theta <= toRad; theta += step)
+            var step = (toRad - fromRad) / segments;
+
+            var from = Vector3.zero;
+
+            for (var i = 0; i < segments + 1; i++)
             {
-                var to = new Vector3(radius * Mathf.Cos(theta), 0, radius * Mathf.Sin(theta));
+                if (i == 0)
+                {
+                    from = new Vector3(radius * Mathf.Cos(fromRad + i * step), 0,
+                        radius * Mathf.Sin(fromRad + i * step));
+                    i++;
+                    continue;
+                }
+
+                var to = new Vector3(radius * Mathf.Cos(fromRad + i * step), 0, radius * Mathf.Sin(fromRad + i * step));
                 Gizmos.DrawLine(from, to);
                 from = to;
             }

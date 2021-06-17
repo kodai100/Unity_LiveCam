@@ -29,7 +29,10 @@ namespace kodai100.LiveCamCore
             if (center == null) return;
 
             Gizmos.color = Color.red;
-            GizmosExtensions.DrawWireCircle(center.position, radius, center.rotation);
+            if (endAngle > startAngle)
+            {
+                GizmosExtensions.DrawWireOpenArc(center.position, radius, startAngle, endAngle, 20, center.rotation);
+            }
         }
     }
 }

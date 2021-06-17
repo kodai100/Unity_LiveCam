@@ -14,6 +14,29 @@ namespace kodai100.LiveCamCore
         Blending
     }
 
+    public class Slot
+    {
+        public bool IsSlotA = false;
+        public RenderTexture RenderTexture;
+        public float MyGloal;
+
+        public Slot(bool isSlotA)
+        {
+            RenderTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGBHalf)
+            {
+                name = isSlotA ? "SlotA" : "SlotB"
+            };
+            RenderTexture.Create();
+
+            MyGloal = isSlotA ? 0f : 1f;
+        }
+
+        public void SetCamera(LiveCam cam)
+        {
+            cam.SetTexture(RenderTexture);
+        }
+    }
+
     public class LiveCamController : MonoBehaviour
     {
         [SerializeField, Range(0f, 1f)] private float blending = 0f;
@@ -22,10 +45,13 @@ namespace kodai100.LiveCamCore
 
         [SerializeField] private Material blendingMaterial;
 
-        [SerializeField] private float blendingTime = 1f;
+        [SerializeField] private float blendingDuration = 1f;
 
-        private RenderTexture standbyRenderTexture;
-        private RenderTexture activeRenderTexture;
+        private Slot slotA;
+        private Slot slotB;
+
+        private Slot currentSlot;
+        private Slot vacantSlot;
 
         private RenderTexture resultRenderTexture;
 
@@ -36,15 +62,11 @@ namespace kodai100.LiveCamCore
         private bool isOperating;
 
         public int LiveCamNum => liveCamList.Count;
-        public int CurrentCameraIndex { get; private set; }
 
         private void Start()
         {
-            standbyRenderTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGBHalf);
-            standbyRenderTexture.Create();
-
-            activeRenderTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGBHalf);
-            activeRenderTexture.Create();
+            slotA = new Slot(true);
+            slotB = new Slot(false);
 
             resultRenderTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGBHalf);
             resultRenderTexture.Create();
@@ -63,8 +85,10 @@ namespace kodai100.LiveCamCore
                 cam.Deactivate();
             });
 
+            currentSlot = slotA;
+            vacantSlot = slotB;
+
             TriggerNextLiveCam(liveCamList[0], LiveCamTriggerMode.CutIn);
-            CurrentCameraIndex = 0;
 
             var rig = Instantiate(liveCamRenderRigPrefab);
             rig.SetTexture(resultRenderTexture);
@@ -86,36 +110,26 @@ namespace kodai100.LiveCamCore
 
             if (mode == LiveCamTriggerMode.Blending)
             {
-                // swap rendering target and blending value
-                currentActiveCamera.SetTexture(standbyRenderTexture);
-
-                cam.SetTexture(activeRenderTexture);
                 cam.Activate();
-                blending = 0;
 
-                await BlendingCoroutine();
+                vacantSlot.SetCamera(cam);
 
-                // wait until blending end
-                currentActiveCamera.Deactivate();
+                await BlendingCoroutine(currentSlot, vacantSlot);
+
+                currentActiveCamera?.Deactivate();
                 currentActiveCamera = cam;
+
+                var tmp = currentSlot;
+                currentSlot = vacantSlot;
+                vacantSlot = tmp;
             }
             else
             {
-                if (currentActiveCamera == null)
-                {
-                    currentActiveCamera = cam;
-                    currentActiveCamera.SetTexture(activeRenderTexture);
-                    currentActiveCamera.Activate();
-                }
-                else
-                {
-                    currentActiveCamera.Deactivate();
-                    currentActiveCamera = cam;
-                    currentActiveCamera.SetTexture(activeRenderTexture);
-                    currentActiveCamera.Activate();
-                }
-
-                blending = 1;
+                cam.Activate();
+                currentSlot.SetCamera(cam);
+                currentActiveCamera?.Deactivate();
+                currentActiveCamera = cam;
+                blending = currentSlot.MyGloal;
             }
         }
 
@@ -127,31 +141,33 @@ namespace kodai100.LiveCamCore
             }
         }
 
-        private IEnumerator BlendingCoroutine()
+        private IEnumerator BlendingCoroutine(Slot from, Slot dst)
         {
             isOperating = true;
 
-
             var t = 0f;
+
             while (true)
             {
-                if (t > blendingTime) break;
+                if (t > blendingDuration) break;
+
                 t += Time.deltaTime;
 
-                blending = t / blendingTime;
+                blending = Mathf.Lerp(from.MyGloal, dst.MyGloal, t / blendingDuration);
 
                 yield return null;
             }
 
-            blending = 1f;
+            blending = dst.MyGloal;
+
             isOperating = false;
         }
 
         private void Update()
         {
             blendingMaterial.SetFloat("_Blending", blending);
-            blendingMaterial.SetTexture("_SrcOne", standbyRenderTexture);
-            blendingMaterial.SetTexture("_SrcTwo", activeRenderTexture);
+            blendingMaterial.SetTexture("_SrcOne", slotA.RenderTexture);
+            blendingMaterial.SetTexture("_SrcTwo", slotB.RenderTexture);
             Graphics.Blit(null, resultRenderTexture, blendingMaterial);
         }
     }

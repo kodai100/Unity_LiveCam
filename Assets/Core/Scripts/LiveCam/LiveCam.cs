@@ -16,7 +16,8 @@ namespace kodai100.LiveCamCore
         [SerializeField] private bool resetFractionOnTrigger;
         [SerializeField, Range(0, 1)] private float fraction;
         [SerializeField] private float fractionSpeed = 1;
-        [SerializeField] private bool fractionLoop = true;
+        [SerializeField] private bool fractionPingPong = true;
+        [SerializeField] private bool fractionEndless = false;
         [SerializeField] private float loopInterval = 10;
 
         private Coroutine coroutine;
@@ -73,13 +74,18 @@ namespace kodai100.LiveCamCore
 
                 if (time * fractionSpeed > loopInterval)
                 {
-                    if (fractionLoop)
+                    if (fractionPingPong)
                     {
                         time = 0;
                         direction = !direction;
                     }
                     else
                     {
+                        if (fractionEndless)
+                        {
+                            time = 0;
+                        }
+
                         direction = true;
                     }
                 }
