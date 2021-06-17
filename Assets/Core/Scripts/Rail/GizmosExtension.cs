@@ -83,6 +83,27 @@ namespace kodai100.LiveCamCore
             Gizmos.matrix = old;
         }
 
+        public static void DrawWireOpenArc(Vector3 center, float radius, float fromAngle, float toAngle,
+            int segments = 20,
+            Quaternion rotation = default(Quaternion))
+        {
+            var old = Gizmos.matrix;
+
+            Gizmos.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);
+            var from = Vector3.right * radius;
+            var fromRad = fromAngle * Mathf.Deg2Rad;
+            var toRad = toAngle * Mathf.Deg2Rad;
+            var step = Mathf.RoundToInt((toRad - fromRad) / segments);
+            for (var theta = fromRad + step; theta <= toRad; theta += step)
+            {
+                var to = new Vector3(radius * Mathf.Cos(theta), 0, radius * Mathf.Sin(theta));
+                Gizmos.DrawLine(from, to);
+                from = to;
+            }
+
+            Gizmos.matrix = old;
+        }
+
 
         /// <summary>
         /// Draws an arc with a rotation around an arbitraty center of rotation

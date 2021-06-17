@@ -7,8 +7,8 @@ namespace kodai100.LiveCamCore
         [SerializeField] private Transform center;
         [SerializeField] private float radius = 10;
 
-        [SerializeField] private float startPI = 1f;
-        [SerializeField] private float endPI = 2f;
+        [SerializeField] private float startAngle = 0f;
+        [SerializeField] private float endAngle = 180f;
 
         public override Vector3 GetCurrentPosition => Calc();
         public override float Fraction { get; set; } = 0f;
@@ -18,7 +18,7 @@ namespace kodai100.LiveCamCore
         {
             if (!center) return Vector3.zero;
 
-            var radian = (endPI - startPI) * Fraction * Mathf.PI + startPI * Mathf.PI;
+            var radian = (endAngle - startAngle) * Mathf.Deg2Rad * Fraction + startAngle * Mathf.Deg2Rad;
             var nonRotatedPos = new Vector3(radius * Mathf.Cos(radian), 0, radius * Mathf.Sin(radian));
             var rotatedPos = center.rotation * nonRotatedPos;
             return rotatedPos + center.position;
