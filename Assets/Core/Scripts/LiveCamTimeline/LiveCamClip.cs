@@ -11,6 +11,7 @@ namespace kodai100.LiveCamCore
         private LiveCamBehaviour template = new LiveCamBehaviour();
 
         public LiveCamTriggerMode TriggerMode = LiveCamTriggerMode.CutIn;
+        public float BlendingDuration = 1f;
         public ExposedReference<LiveCam> TargetLiveCam;
 
         public ClipCaps clipCaps
@@ -23,6 +24,7 @@ namespace kodai100.LiveCamCore
             var playable = ScriptPlayable<LiveCamBehaviour>.Create(graph, template);
             var clone = playable.GetBehaviour();
             clone.TargetLiveCam = TargetLiveCam.Resolve(graph.GetResolver());
+            clone.BlendingDuration = BlendingDuration;
             clone.TriggerMode = TriggerMode;
             return playable;
         }

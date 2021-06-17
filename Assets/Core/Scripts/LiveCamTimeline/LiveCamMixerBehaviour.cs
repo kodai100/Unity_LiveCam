@@ -22,7 +22,7 @@ namespace kodai100.LiveCamCore
 
                 if (inputWeight > 0)
                 {
-                    trackBinding.TriggerNextLiveCam(input.TargetLiveCam, input.TriggerMode);
+                    trackBinding.TriggerNextLiveCam(input.TargetLiveCam, input.TriggerMode, input.BlendingDuration);
                 }
             }
         }

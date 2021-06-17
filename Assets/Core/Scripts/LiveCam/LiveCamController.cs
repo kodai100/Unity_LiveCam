@@ -45,8 +45,6 @@ namespace kodai100.LiveCamCore
 
         [SerializeField] private Material blendingMaterial;
 
-        [SerializeField] private float blendingDuration = 1f;
-
         private Slot slotA;
         private Slot slotB;
 
@@ -88,25 +86,27 @@ namespace kodai100.LiveCamCore
             currentSlot = slotA;
             vacantSlot = slotB;
 
-            TriggerNextLiveCam(liveCamList[0], LiveCamTriggerMode.CutIn);
+            TriggerNextLiveCam(liveCamList[0], LiveCamTriggerMode.CutIn, 0);
 
             var rig = Instantiate(liveCamRenderRigPrefab);
             rig.SetTexture(resultRenderTexture);
         }
 
-        public async void TriggerNextLiveCam(LiveCam cam, LiveCamTriggerMode mode)
+        public async void TriggerNextLiveCam(LiveCam cam, LiveCamTriggerMode mode, float blendingDuration)
         {
             if (isOperating)
             {
-                // Debug.Log("Under Operation. Aborted");
+                Debug.Log("Under Operation. Aborted");
                 return;
             }
 
             if (cam == currentActiveCamera)
             {
-                // Debug.Log("Target is current camera. Aborted.");
+                Debug.Log("Target is current camera. Aborted.");
                 return;
             }
+
+            isOperating = true;
 
             if (mode == LiveCamTriggerMode.Blending)
             {
@@ -114,7 +114,7 @@ namespace kodai100.LiveCamCore
 
                 vacantSlot.SetCamera(cam);
 
-                await BlendingCoroutine(currentSlot, vacantSlot);
+                await BlendingCoroutine(currentSlot, vacantSlot, blendingDuration);
 
                 currentActiveCamera?.Deactivate();
                 currentActiveCamera = cam;
@@ -131,36 +131,37 @@ namespace kodai100.LiveCamCore
                 currentActiveCamera = cam;
                 blending = currentSlot.MyGloal;
             }
+
+            isOperating = false;
         }
 
-        public void TriggerNextLiveCamWithIndex(int index, LiveCamTriggerMode mode)
+        public void TriggerNextLiveCamWithIndex(int index, LiveCamTriggerMode mode, float blendingDuration)
         {
             if (index < liveCamList.Count)
             {
-                TriggerNextLiveCam(liveCamList[index], mode);
+                TriggerNextLiveCam(liveCamList[index], mode, blendingDuration);
             }
         }
 
-        private IEnumerator BlendingCoroutine(Slot from, Slot dst)
+        private IEnumerator BlendingCoroutine(Slot from, Slot dst, float blendingDuration)
         {
-            isOperating = true;
-
-            var t = 0f;
-
-            while (true)
+            if (blendingDuration > Mathf.Epsilon)
             {
-                if (t > blendingDuration) break;
+                var t = 0f;
 
-                t += Time.deltaTime;
+                while (true)
+                {
+                    if (t > blendingDuration) break;
 
-                blending = Mathf.Lerp(from.MyGloal, dst.MyGloal, t / blendingDuration);
+                    t += Time.deltaTime;
 
-                yield return null;
+                    blending = Mathf.Lerp(from.MyGloal, dst.MyGloal, t / blendingDuration);
+
+                    yield return null;
+                }
             }
 
             blending = dst.MyGloal;
-
-            isOperating = false;
         }
 
         private void Update()
