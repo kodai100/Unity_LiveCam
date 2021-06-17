@@ -1,0 +1,11 @@
+{
+  "name": "com.kodai100.live-cam",
+  "displayName": "Live Cam",
+  "version": "1.0.0",
+  "unity": "2021.1",
+  "description": "Live switching camera system for unity",
+  "keywords": [
+    "ProjectBLUE"
+  ],
+  "unityRelease": "10f1"
+}
