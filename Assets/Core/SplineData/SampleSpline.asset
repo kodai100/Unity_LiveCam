@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73e742fbca60a22498b5348413c61612, type: 3}
+  m_Name: SampleSpline
+  m_EditorClassIdentifier: 
+  cps:
+  - position: {x: -14.637489, y: 9.338223, z: 17.781483}
+  - position: {x: 16.075691, y: 0.50222445, z: 15.949503}
+  - position: {x: 21.710138, y: 6.2973423, z: -12.49339}
+  - position: {x: -2.4141583, y: -0.28753066, z: -25.234188}
+  - position: {x: -24.338367, y: 13.294287, z: -7.5478363}

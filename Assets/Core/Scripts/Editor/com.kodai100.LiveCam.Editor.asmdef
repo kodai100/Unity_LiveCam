@@ -1,0 +1,18 @@
+{
+    "name": "com.kodai100.LiveCam.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0e45a377ed76bba429a6fbdb6136c050"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
