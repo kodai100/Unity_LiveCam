@@ -16,6 +16,7 @@ namespace kodai100.LiveCamCore
 
         [Space] [SerializeField] protected EaseType easeType = EaseType.InOutSine;
         [SerializeField] private bool resetFractionOnTrigger;
+        [SerializeField] private bool initialDirection = true;
         [SerializeField, Range(0, 1)] private float fraction;
         [SerializeField] private float fractionSpeed = 1;
         [SerializeField] private bool fractionPingPong = true;
@@ -24,7 +25,7 @@ namespace kodai100.LiveCamCore
 
         private Coroutine coroutine;
         private float time;
-        private bool direction = true;
+        private bool direction;
 
         public void SetTexture(RenderTexture texture)
         {
@@ -38,6 +39,8 @@ namespace kodai100.LiveCamCore
 
         private void Start()
         {
+            direction = initialDirection;
+
             if (Application.isPlaying)
             {
                 coroutine = StartCoroutine(Loop());
@@ -53,7 +56,7 @@ namespace kodai100.LiveCamCore
 
                 if (lookTangentDirection)
                 {
-                    transform.forward = rail.Tangent;
+                    transform.forward = direction ? rail.Tangent : -rail.Tangent;
                 }
             }
 
@@ -92,7 +95,7 @@ namespace kodai100.LiveCamCore
                             time = 0;
                         }
 
-                        direction = true;
+                        direction = initialDirection;
                     }
                 }
 
