@@ -14,10 +14,7 @@ namespace kodai100.LiveCamCore
         public float BlendingDuration = 1f;
         public ExposedReference<LiveCam> TargetLiveCam;
 
-        public ClipCaps clipCaps
-        {
-            get { return ClipCaps.None; }
-        }
+        public ClipCaps clipCaps => ClipCaps.None;
 
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {

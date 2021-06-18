@@ -4,6 +4,8 @@ namespace kodai100.LiveCamCore
 {
     public class LiveCamMixerBehaviour : PlayableBehaviour
     {
+        private LiveCam prevCam;
+
         // NOTE: This function is called at runtime and edit time.  Keep that in mind when setting the values of properties.
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
@@ -22,7 +24,11 @@ namespace kodai100.LiveCamCore
 
                 if (inputWeight > 0)
                 {
-                    trackBinding.TriggerNextLiveCam(input.TargetLiveCam, input.TriggerMode, input.BlendingDuration);
+                    if (prevCam != input.TargetLiveCam)
+                    {
+                        trackBinding.TriggerNextLiveCam(input.TargetLiveCam, input.TriggerMode, input.BlendingDuration);
+                        prevCam = input.TargetLiveCam;
+                    }
                 }
             }
         }
