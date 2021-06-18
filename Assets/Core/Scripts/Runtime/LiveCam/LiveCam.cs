@@ -9,6 +9,8 @@ namespace kodai100.LiveCamCore
     {
         [SerializeField] private Camera camera;
 
+        [Space] [SerializeField] private bool lookTangentDirection;
+
         [Space] [SerializeField] private TargetSystem target;
         [SerializeField] private Rail rail;
 
@@ -48,10 +50,14 @@ namespace kodai100.LiveCamCore
             {
                 rail.Fraction = EaseUtility.Ease(fraction, easeType);
                 transform.position = rail.GetCurrentPosition;
-                // TODO: add jitter transform
+
+                if (lookTangentDirection)
+                {
+                    transform.forward = rail.Tangent;
+                }
             }
 
-            if (target)
+            if (target != null && !lookTangentDirection)
             {
                 var forwardToTarget = target.Position - transform.position;
                 var rot = Quaternion.LookRotation(forwardToTarget);

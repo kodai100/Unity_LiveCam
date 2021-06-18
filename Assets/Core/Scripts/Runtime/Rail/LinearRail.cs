@@ -9,6 +9,8 @@ namespace kodai100.LiveCamCore
 
         public override Vector3 GetCurrentPosition => Vector3.Lerp(point1.position, point2.position, Fraction);
 
+        public override Vector3 Tangent => (point2.position - point1.position).normalized;
+
         public override float Fraction { get; set; } = 0f;
 
         private void OnDrawGizmos()

@@ -11,6 +11,8 @@ namespace kodai100.LiveCamCore
 
         public override float Fraction { get; set; } = 0f;
 
+        public override Vector3 Tangent => spline.Velosity(Fraction * spline.Period()).normalized;
+
 
         public const int GIZMO_SMOOTH_LEVEL = 10;
 

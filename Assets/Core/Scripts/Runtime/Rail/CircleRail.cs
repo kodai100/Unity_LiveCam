@@ -13,6 +13,8 @@ namespace kodai100.LiveCamCore
         public override Vector3 GetCurrentPosition => Calc();
         public override float Fraction { get; set; } = 0f;
 
+        public override Vector3 Tangent => CalcTangent();
+
 
         private Vector3 Calc()
         {
@@ -22,6 +24,15 @@ namespace kodai100.LiveCamCore
             var nonRotatedPos = new Vector3(radius * Mathf.Cos(radian), 0, radius * Mathf.Sin(radian));
             var rotatedPos = center.rotation * nonRotatedPos;
             return rotatedPos + center.position;
+        }
+
+        private Vector3 CalcTangent()
+        {
+            if (!center) return Vector3.zero;
+
+            var radian = (endAngle - startAngle) * Mathf.Deg2Rad * Fraction + startAngle * Mathf.Deg2Rad;
+            var nonRotatedPos = new Vector3(-Mathf.Sin(radian), 0, Mathf.Cos(radian));
+            return center.rotation * nonRotatedPos;
         }
 
         private void OnDrawGizmos()
