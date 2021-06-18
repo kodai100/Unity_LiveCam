@@ -20,9 +20,9 @@ namespace kodai100.LiveCamCore
         public RenderTexture RenderTexture;
         public float MyGloal;
 
-        public Slot(bool isSlotA)
+        public Slot(int width, int height, bool isSlotA)
         {
-            RenderTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGBHalf)
+            RenderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGBFloat)
             {
                 name = isSlotA ? "SlotA" : "SlotB"
             };
@@ -45,6 +45,8 @@ namespace kodai100.LiveCamCore
 
         [SerializeField] private Material blendingMaterial;
 
+        [SerializeField] private Vector2Int screenResolution = new Vector2Int(1920, 1080);
+
         private Slot slotA;
         private Slot slotB;
 
@@ -63,10 +65,12 @@ namespace kodai100.LiveCamCore
 
         private void Start()
         {
-            slotA = new Slot(true);
-            slotB = new Slot(false);
+            slotA = new Slot(screenResolution.x, screenResolution.y, true);
+            slotB = new Slot(screenResolution.x, screenResolution.y, false);
 
-            resultRenderTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGBHalf);
+            resultRenderTexture =
+                new RenderTexture(screenResolution.x, screenResolution.y, 24, RenderTextureFormat.ARGBFloat)
+                    {name = "LiveCamOutput"};
             resultRenderTexture.Create();
 
             liveCamList = Resources.FindObjectsOfTypeAll<LiveCam>().ToList();
