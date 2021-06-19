@@ -118,6 +118,7 @@ namespace kodai100.LiveCamCore
 
                 vacantSlot.SetCamera(cam);
 
+                await UniTask.WaitForEndOfFrame();
                 await BlendingCoroutine(currentSlot, vacantSlot, blendingDuration);
 
                 currentActiveCamera?.Deactivate();
@@ -152,8 +153,6 @@ namespace kodai100.LiveCamCore
             if (blendingDuration > Mathf.Epsilon)
             {
                 var t = 0f;
-
-                yield return new WaitForEndOfFrame();
 
                 while (true)
                 {
