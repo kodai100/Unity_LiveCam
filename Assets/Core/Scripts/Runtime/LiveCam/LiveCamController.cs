@@ -153,6 +153,8 @@ namespace kodai100.LiveCamCore
             {
                 var t = 0f;
 
+                yield return new WaitForEndOfFrame();
+
                 while (true)
                 {
                     if (t > blendingDuration) break;
