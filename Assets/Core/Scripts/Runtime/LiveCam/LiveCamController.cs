@@ -63,6 +63,22 @@ namespace kodai100.LiveCamCore
 
         public int LiveCamNum => liveCamList.Count;
 
+        public int CurrentLiveCamIndex
+        {
+            get
+            {
+                for (var i = 0; i < liveCamList.Count; i++)
+                {
+                    if (liveCamList[i] == currentActiveCamera)
+                    {
+                        return i;
+                    }
+                }
+
+                return -1;
+            }
+        }
+
         private void Start()
         {
             slotA = new Slot(screenResolution.x, screenResolution.y, true);
