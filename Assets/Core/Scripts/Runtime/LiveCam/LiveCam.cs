@@ -7,6 +7,8 @@ namespace kodai100.LiveCamCore
     [ExecuteInEditMode, RequireComponent(typeof(Camera))]
     public class LiveCam : MonoBehaviour
     {
+        [SerializeField] private string id = "/CAM";
+
         [SerializeField] private Camera camera;
 
         [Space] [SerializeField] private bool lookTangentDirection;
@@ -27,6 +29,8 @@ namespace kodai100.LiveCamCore
         private float time;
         private bool direction;
 
+        public string Id => id;
+
         public void SetTexture(RenderTexture texture)
         {
             camera.targetTexture = texture;
@@ -39,6 +43,8 @@ namespace kodai100.LiveCamCore
 
         private void Start()
         {
+            gameObject.name = id;
+
             direction = initialDirection;
 
             if (Application.isPlaying)

@@ -164,6 +164,18 @@ namespace kodai100.LiveCamCore
             }
         }
 
+        public void TriggerNextLiveCamWithId(string id, LiveCamTriggerMode mode, float blendingDuration)
+        {
+            foreach (var cam in liveCamList)
+            {
+                if (id == cam.Id)
+                {
+                    TriggerNextLiveCam(cam, mode, blendingDuration);
+                    break;
+                }
+            }
+        }
+
         private IEnumerator BlendingCoroutine(Slot from, Slot dst, float blendingDuration)
         {
             if (blendingDuration > Mathf.Epsilon)
