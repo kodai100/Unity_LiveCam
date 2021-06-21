@@ -3,7 +3,7 @@ using UnityEngine;
 namespace kodai100.LiveCamCore
 {
     [ExecuteInEditMode]
-    public class ActorTargetSystem : TargetSystem
+    public class HorizontalTargetSystem : TargetSystem
     {
         [SerializeField] private float fixedHeight = 1.3f;
         [SerializeField] private Transform targetHip;

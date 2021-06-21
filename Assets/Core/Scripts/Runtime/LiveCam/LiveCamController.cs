@@ -105,6 +105,7 @@ namespace kodai100.LiveCamCore
                 Resources.FindObjectsOfTypeAll<LiveCam>().ToList().ForEach(camera => { camera.Deactivate(); });
 
                 cam.Activate();
+                return;
             }
 
             if (isOperating)
