@@ -26,7 +26,7 @@ namespace kodai100.LiveCamCore
             if (text)
             {
                 text.text = $"FPS : {Mathf.FloorToInt(fps):D3}";
-                text.color = fps < 60 ? Color.red : Color.cyan;
+                text.color = fps < 30 ? Color.red : Color.cyan;
             }
         }
     }
