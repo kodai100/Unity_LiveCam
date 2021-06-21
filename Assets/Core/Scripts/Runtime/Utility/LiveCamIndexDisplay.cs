@@ -18,7 +18,7 @@ namespace kodai100.LiveCamCore
         {
             if (controller == null) return;
 
-            text.text = $"CAM {controller.CurrentLiveCamIndex:D2} / {controller.LiveCamNum:D2}";
+            text.text = $"{controller.CurrentLiveCamId} of {controller.LiveCamNum:D2}";
         }
     }
 }
