@@ -100,15 +100,22 @@ namespace kodai100.LiveCamCore
 
         public async void TriggerNextLiveCam(LiveCam cam, LiveCamTriggerMode mode, float blendingDuration)
         {
+            if (!Application.isPlaying)
+            {
+                Resources.FindObjectsOfTypeAll<LiveCam>().ToList().ForEach(camera => { camera.Deactivate(); });
+
+                cam.Activate();
+            }
+
             if (isOperating)
             {
-                Debug.Log("Under Operation. Aborted");
+                // Debug.Log("Under Operation. Aborted");
                 return;
             }
 
             if (cam == currentActiveCamera)
             {
-                Debug.Log("Target is current camera. Aborted.");
+                // Debug.Log("Target is current camera. Aborted.");
                 return;
             }
 
