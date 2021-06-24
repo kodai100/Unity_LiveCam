@@ -25,9 +25,7 @@ namespace kodai100.LiveCamCore
 
             filter ??= new Vector3LowPassFilter(smoothingFactor, new Vector3(position.x, fixedHeight, position.z));
 
-            Position = Application.isPlaying
-                ? filter.Append(new Vector3(position.x, fixedHeight, position.z))
-                : new Vector3(position.x, fixedHeight, position.z);
+            Position = Application.isPlaying ? filter.Append(position) : position;
         }
 
         public void OnDrawGizmos()
