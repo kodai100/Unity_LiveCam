@@ -18,7 +18,7 @@ namespace kodai100.LiveCamCore
         {
             if (!target) return;
 
-            var position = target.position + offset;
+            var position = useWiggle ? target.position + offset + wiggler.GetWiggle() : target.position + offset;
 
             filter ??= new Vector3LowPassFilter(smoothingFactor, position);
 

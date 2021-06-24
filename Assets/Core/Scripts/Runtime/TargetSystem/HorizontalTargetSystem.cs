@@ -19,6 +19,9 @@ namespace kodai100.LiveCamCore
             if (!targetHip) return;
 
             var position = targetHip.position;
+            position.y = fixedHeight;
+
+            position = useWiggle ? position + wiggler.GetWiggle() : position;
 
             filter ??= new Vector3LowPassFilter(smoothingFactor, new Vector3(position.x, fixedHeight, position.z));
 
