@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -66,6 +67,11 @@ namespace kodai100.LiveCamCore
                 }
             }
 
+            
+        }
+
+        private void LateUpdate()
+        {
             if (target != null && !lookTangentDirection)
             {
                 var forwardToTarget = target.Position - transform.position;
