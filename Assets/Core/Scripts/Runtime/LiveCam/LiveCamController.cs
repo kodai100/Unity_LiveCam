@@ -18,7 +18,7 @@ namespace kodai100.LiveCamCore
     {
         public bool IsSlotA = false;
         public RenderTexture RenderTexture;
-        public float MyGloal;
+        public float Goal;
 
         public Slot(int width, int height, bool isSlotA)
         {
@@ -28,7 +28,7 @@ namespace kodai100.LiveCamCore
             };
             RenderTexture.Create();
 
-            MyGloal = isSlotA ? 0f : 1f;
+            Goal = isSlotA ? 0f : 1f;
         }
 
         public void SetCamera(LiveCam cam)
@@ -144,7 +144,7 @@ namespace kodai100.LiveCamCore
                 currentSlot.SetCamera(cam);
                 currentActiveCamera?.Deactivate();
                 currentActiveCamera = cam;
-                blending = currentSlot.MyGloal;
+                blending = currentSlot.Goal;
             }
 
             isOperating = false;
@@ -182,13 +182,13 @@ namespace kodai100.LiveCamCore
 
                     t += Time.deltaTime;
 
-                    blending = Mathf.Lerp(from.MyGloal, dst.MyGloal, t / blendingDuration);
+                    blending = Mathf.Lerp(from.Goal, dst.Goal, t / blendingDuration);
 
                     yield return null;
                 }
             }
 
-            blending = dst.MyGloal;
+            blending = dst.Goal;
         }
 
         private void Update()
